@@ -1,3 +1,4 @@
 import random
 hands = ["グー", "チョキ", "パー"]
-print(random.choice(hands))
+com_answer = random.randint(1, 3)
+print("COM = " + hands[com_answer - 1])
