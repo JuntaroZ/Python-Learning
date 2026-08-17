@@ -1,0 +1,4 @@
+１．Pythonインストール
+２．Google アカウントにログイン
+３．aistudio.google.com にアクセス、利用規約に同意後、APIキーを取得
+４．pip install google-genai
