@@ -5,10 +5,10 @@ from google import genai
 book = openpyxl.load_workbook("./excel/translate.xlsx")
 sheet = book.active
 
-source_lang = sheet["A1"].value # 翻訳元言語
-target_lang = sheet["B1"].value # 翻訳先言語
+SOURCE_LANG = sheet["A1"].value # 翻訳元言語
+TARGET_LANG = sheet["B1"].value # 翻訳先言語
 
-print("翻訳元言語：" + source_lang  + "、翻訳先言語：" + target_lang)
+print("翻訳元言語：" + SOURCE_LANG  + "、翻訳先言語：" + TARGET_LANG)
 
 client = genai.Client()
 
@@ -21,7 +21,7 @@ while True: # 無限ループ
 
     response = client.models.generate_content(
         model = "gemini-3.5-flash-lite",
-        contents = source_lang + "を" + target_lang + "に翻訳（最適な結果を１つだけ返してください）：" + translate_text
+        contents = SOURCE_LANG + "を" + TARGET_LANG + "に翻訳（最適な結果を１つだけ返してください）：" + translate_text
     )
     # B列に結果を書き込む
     sheet[f"B{index}"].value = response.text
