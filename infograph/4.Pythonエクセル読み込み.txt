@@ -1,0 +1,17 @@
+・タイトル：Python でエクセルを読み込みしてみよう！
+・A1に「日本語」、B1に「英語」が入っています
+・A2に「おはようございます」が入っています。
+・実行結果が「日本語」となることも表示してください
+・A4サイズで作成すること
+・以下コードを初心者もわかるようインフォグラフィックスを作成
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+import openpyxl
+
+# エクセルを読み込む
+book = openpyxl.load_workbook("./excel/translate.xlsx")
+sheet = book.active
+
+text = sheet["A1"].value
+print(text)
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+

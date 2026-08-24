@@ -1,0 +1,20 @@
+・タイトル：Python でエクセルを読み書きしてみよう！
+・A1に「日本語」、B1に「英語」が入っています
+・A2に「おはようございます」が入っています。出力前後のエクセルも比較表示してください
+・A4サイズで作成すること
+・以下コードを初心者もわかるようインフォグラフィックスを作成
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+import openpyxl
+
+# エクセルを読み込む
+book = openpyxl.load_workbook("./excel/translate.xlsx")
+sheet = book.active
+
+text = sheet["A2"].value
+print(text)
+
+# エクセルに書き込む
+sheet["B2"].value = "Good morning."
+book.save("./excel/translate.xlsx")
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
