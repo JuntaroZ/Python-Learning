@@ -5,8 +5,8 @@ from google import genai
 book = openpyxl.load_workbook("./excel/translate.xlsx")
 sheet = book.active
 
-SOURCE_LANG = 1._______________ # 翻訳元言語をシートA1から取得
-TARGET_LANG = 2._______________ # 翻訳先言語をシートB1から取得
+SOURCE_LANG = sheet["A1"].value # 翻訳元言語をシートA1から取得
+TARGET_LANG = sheet["B1"].value # 翻訳先言語をシートB1から取得
 
 print("翻訳元言語：" + SOURCE_LANG  + "、翻訳先言語：" + TARGET_LANG)
 
@@ -22,11 +22,11 @@ while True: # 無限ループ
         break
     # 翻訳を実行する
     response = chat.send_message(
-        3._________ + "を" + 4._________ + "に翻訳（翻訳結果を１つ返してください）：" + 5.______________
+        SOURCE_LANG + "を" + TARGET_LANG + "に翻訳（翻訳結果を１つ返してください）：" + translate_text
     )
     # B列の各行に結果(response.text)を書き込む
-    6.______________________ = 7.___________
+    sheet[f"B{index}"].value = response.text
     # 次の行に移動する
     index += 1
-
+    
 book.save("./excel/translate.xlsx")

@@ -7,7 +7,7 @@
 　・私は毎朝コーヒーを飲みます。	I drink coffee every morning.
 ・A4サイズで作成すること
 ・文字化けを修正してください
-・ページ番号６
+・ページ番号７
 ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 import openpyxl
 from google import genai
@@ -16,12 +16,13 @@ from google import genai
 book = openpyxl.load_workbook("./excel/translate.xlsx")
 sheet = book.active
 
-SOURCE_LANG = 1._______________ # 翻訳元言語をシートA1から取得
-TARGET_LANG = 2._______________ # 翻訳先言語をシートB1から取得
+SOURCE_LANG = sheet["A1"].value # 翻訳元言語をシートA1から取得
+TARGET_LANG = sheet["B1"].value # 翻訳先言語をシートB1から取得
 
 print("翻訳元言語：" + SOURCE_LANG  + "、翻訳先言語：" + TARGET_LANG)
 
 client = genai.Client()
+chat = client.chats.create(model="gemini-3.5-flash-lite")
 
 index = 2 # A2から開始
 while True: # 無限ループ
@@ -31,16 +32,14 @@ while True: # 無限ループ
     if translate_text is None or translate_text == "":
         break
     # 翻訳を実行する
-    response = client.models.generate_content(
-        model = "gemini-3.5-flash-lite",
-        contents = 3.__________ + "を" + 4.__________ + "に翻訳" +
-            "（最適な翻訳結果を１つだけ返してください）：" + 5.______________
+    response = chat.send_message(
+        SOURCE_LANG + "を" + TARGET_LANG + "に翻訳（翻訳結果を１つ返してください）：" + translate_text
     )
     # B列の各行に結果(response.text)を書き込む
-    6.________________________ = 7._____________
+    sheet[f"B{index}"].value = response.text
     # 次の行に移動する
     index += 1
-
+    
 book.save("./excel/translate.xlsx")
 
 ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
@@ -50,5 +49,11 @@ book.save("./excel/translate.xlsx")
 　┗色の説明はすべて不要です
 ・縮小してもよいのでプログラムは最終行まですべて出力
 ・1. ～ 7.の矢印は必ず該当行を指すこと。
-・答えを入れないで。1. ～ 7. のアンダーバーの部分はそのまま出力。
-・3. 4. の説明は「翻訳元と翻訳先を指定して指示文を作成」としてください
+・それぞれ回答は以下のとおり
+	1. sheet["A1"].value
+	2. sheet["B1"].value
+	3. SOURCE_LANG
+	4. TARGET_LANG
+	5. translate_text
+	6. sheet[f"A{index}"].value
+	7. response.text
