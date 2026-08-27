@@ -1,5 +1,6 @@
 import openpyxl
 from google import genai
+from itertools import count
 
 # エクセルを読み込む
 book = openpyxl.load_workbook("./excel/translate.xlsx")
@@ -13,8 +14,7 @@ print("翻訳元言語：" + SOURCE_LANG  + "、翻訳先言語：" + TARGET_LAN
 client = genai.Client()
 chat = client.chats.create(model="gemini-3.5-flash-lite")
 
-index = 2 # A2から開始
-while True: # 無限ループ
+for index in count(2): # 無限ループ
     # A列の文章を読み取る
     translate_text = sheet[f"A{index}"].value
     # A列が空白の場合はループを抜ける
@@ -22,11 +22,10 @@ while True: # 無限ループ
         break
     # 翻訳を実行する
     response = chat.send_message(
-        3._________ + "を" + 4._________ + "に翻訳（翻訳結果を１つ返してください）：" + 5.______________
+        3._________ + "を" + 4._________ + 
+        "に翻訳（翻訳結果を１つ返してください）：" + 5.______________
     )
     # B列の各行に結果(response.text)を書き込む
     6.______________________ = 7.___________
-    # 次の行に移動する
-    index += 1
-
+    
 book.save("./excel/translate.xlsx")
