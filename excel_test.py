@@ -8,3 +8,6 @@ text = sheet["A1"].value
 
 print(text)
 
+
+# エクセルを上書きセーブする処理
+# book.save("./excel/translate.xlsx")
