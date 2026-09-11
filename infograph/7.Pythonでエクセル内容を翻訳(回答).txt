@@ -1,0 +1,66 @@
+・以下内容を初心者もわかるようインフォグラフィックスを作成
+・タイトル：Python でエクセル内容を翻訳してみよう！　左上にPythonロゴは公式のロゴを入れること
+・A1に「日本語」、B1に「英語」が入っています
+・A2, B2以降は以下内容にしてください。
+　・おはようございます。	Good morning.
+　・今日はとてもいい天気です。	It is very nice weather today.
+　・私は毎朝コーヒーを飲みます。	I drink coffee every morning.
+・A4サイズで作成すること
+・文字化けを修正してください
+・ページ番号７
+・プログラム部分の下地は白一色にしてください
+
+・変数は白色、予約語とメソッドは薄紫色、大文字の定数は青色、カッコは橙色、文字列は水色、コメントは灰色、import/fromは紫色、ライブラリ名は薄青緑色
+・出力ログはすべて白色
+・ダブルコートは半角で水色
+　┗色の説明はすべて不要です
+
+・左側にプログラム欄を生成。縮小してもよいのでプログラムは最終行まですべて出力
+・右側に1. ～ 7. の説明欄を生成。
+・1. ～ 7.の説明欄はそれぞれ独立させること。
+・1. ～ 7.の説明欄の番号の色はすべて橙色固定にすること。
+・1. ～ 7.の説明欄からそれぞれ1. ～ 7.のプログラム箇所への矢印は不要！
+・それぞれ以下回答を「プログラム欄の各文字と同じ色」で記載
+　┗1. sheet["A1"].value　※青一色にしないこと！
+　┗2. sheet["B1"].value　※青一色にしないこと！
+　┗3. SOURCE_LANG
+　┗4. TARGET_LANG
+　┗5. translate_text
+　┗6. sheet[f"B{index}"].value　※1. 2. と同じ色構成にすること！
+　┗7. response.text
+
+・ヒントの欄は不要で、代わりに期待する実行結果の簡単な説明を記載すること。
+
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+import openpyxl
+from google import genai
+from itertools import count
+
+# エクセルを読み込む
+book = openpyxl.load_workbook("./excel/translate.xlsx")
+sheet = book.active
+
+SOURCE_LANG = sheet["A1"].value # 翻訳元言語をシートA1から取得
+TARGET_LANG = sheet["B1"].value # 翻訳先言語をシートB1から取得
+
+print("翻訳元言語：" + SOURCE_LANG  + "、翻訳先言語：" + TARGET_LANG)
+
+client = genai.Client()
+chat = client.chats.create(model="gemini-3.5-flash-lite")
+
+for index in count(2): # 無限ループ
+    # A列の文章を読み取る
+    translate_text = sheet[f"A{index}"].value
+    # A列が空白の場合はループを抜ける
+    if translate_text is None or translate_text == "":
+        break
+    # 翻訳を実行する
+    response = chat.send_message(
+        SOURCE_LANG + "を" + TARGET_LANG + 
+        "に翻訳（翻訳結果を１つ返してください）：" + translate_text
+    )
+    # B列の各行に結果(response.text)を書き込む
+    sheet[f"B{index}"].value = response.text
+
+book.save("./excel/translate.xlsx")
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
